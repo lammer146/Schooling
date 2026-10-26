@@ -328,7 +328,7 @@ const OVERRIDES={
 };
 // Звонки
 const BELLS={
-  mon:{talk:['09:00','09:30'],pairs:[['09:35','10:55'],['11:05','12:25'],['12:55','14:15'],['14:25','15:45']]},
+  mon:{talk:['09:00','09:45'],pairs:[['09:50','11:20'],['11:30','13:00'],['13:30','15:00'],['15:10','16:40']]},
   std:{pairs:[['09:00','10:20'],['10:30','11:50'],['12:20','13:40'],['13:50','15:10']]}
 };
 
@@ -373,7 +373,7 @@ function dayItems(date){
   if(dow>4)return [];
   const b=dow===0?BELLS.mon:BELLS.std;
   const items=[];
-  if(b.talk)items.push({kind:'talk',n:0,s:tm(b.talk[0]),e:tm(b.talk[1]),name:'Разговоры о важном',short:'Разговоры о важном',teacher:'',hue:300});
+  if(b.talk)items.push({kind:'talk',n:0,s:tm(b.talk[0]),e:tm(b.talk[1]),name:'Классный час',short:'Классный час',teacher:'',hue:300});
   const base=WEEK[dow]||[];
   const ov=OVERRIDES[key(date)]||{};
   b.pairs.forEach((p,i)=>{
@@ -482,7 +482,7 @@ function renderList(){
   items.forEach((it,i)=>{
     if(i>0){
       const p=items[i-1],gap=it.s-p.e,win=it.n-p.n>1&&p.kind==='pair',big=gap>=25;
-      html+=`<div class="brk ${big?'big':''} ${win?'win':''}" data-s="${p.e}" data-e="${it.s}"><span>${win?'🪟 окно':big?'☕ большая перемена':'перемена'} · ${gap} мин · ${hm(p.e)}–${hm(it.s)}</span></div>`;
+      html+=`<div class="brk ${big?'big':''} ${win?'win':''}" data-s="${p.e}" data-e="${it.s}"><span>${win?'🪟 окно':big?'🍜 обед / большая перемена':'перемена'} · ${gap} мин · ${hm(p.e)}–${hm(it.s)}</span></div>`;
     }
     html+=lessonHTML(it,i);
   });
@@ -492,12 +492,12 @@ function renderList(){
 /* ---------- звонки ---------- */
 function renderBells(){
   const b=BELLS[bellMode],rows=[];
-  if(b.talk)rows.push({n:'💬',label:'Разговоры о важном',s:tm(b.talk[0]),e:tm(b.talk[1])});
+  if(b.talk)rows.push({n:'💬',label:'Классный час',s:tm(b.talk[0]),e:tm(b.talk[1])});
   b.pairs.forEach((p,i)=>rows.push({n:i+1,label:`${i+1} пара`,s:tm(p[0]),e:tm(p[1])}));
   let h='';
   rows.forEach((r,i)=>{
     if(i){const g=r.s-rows[i-1].e;
-      h+=`<div class="bgap ${g>=25?'big':''}" data-s="${rows[i-1].e}" data-e="${r.s}"><i></i><span>${g>=25?'☕ большая перемена':'перемена'} ${g} мин</span><i></i></div>`;}
+      h+=`<div class="bgap ${g>=25?'big':''}" data-s="${rows[i-1].e}" data-e="${r.s}"><i></i><span>${g>=25?'🍜 обед / большая перемена':'перемена'} ${g} мин</span><i></i></div>`;}
     h+=`<div class="brow" data-s="${r.s}" data-e="${r.e}"><span class="bn">${r.n}</span><div class="bm"><b>${hm(r.s)} – ${hm(r.e)}</b><small>${r.label} · ${r.e-r.s} мин</small></div><span class="beta"></span></div>`;
   });
   $('bellList').innerHTML=h;
